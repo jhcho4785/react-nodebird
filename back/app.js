@@ -50,7 +50,7 @@ app.use(passport.session());
 
 app.use(
   cors({
-    origin: ['http://localhost:3060', 'nodebird.com'],
+    origin: ['http://localhost:3060', 'nodebird.com', 'http://3.38.100.50'],
     credentials: true,
   }),
 );
