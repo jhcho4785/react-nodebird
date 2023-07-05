@@ -11,6 +11,7 @@ import {
 } from '@/components/ImagesZoom/styles';
 import { Global } from '@emotion/react';
 import Image from 'next/image';
+import { backUrl } from '@/config/config';
 
 interface Props {
   images: { src: string }[];
@@ -37,7 +38,7 @@ const ImagesZoom: FC<Props> = ({ images, onClose }) => {
           >
             {images.map((v) => (
               <ImgWrapper key={v.src}>
-                <Image src={`http://localhost:3065/${v.src}`} alt={v.src} />
+                <Image src={`${backUrl}/${v.src}`} alt={v.src} />
               </ImgWrapper>
             ))}
           </Slick>

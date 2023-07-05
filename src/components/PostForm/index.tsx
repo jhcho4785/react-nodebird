@@ -8,6 +8,7 @@ import Post from '@/interfaces/post';
 import { AxiosError } from 'axios';
 import { addPost, uploadImagesAPI } from '@/apis/post';
 import Image from 'next/image';
+import { backUrl } from '@/config/config';
 
 interface PostFormType {
   content: string;
@@ -90,7 +91,7 @@ const PostForm = () => {
       <div>
         {imagePaths.map((v, i) => (
           <div key={v} style={{ display: 'inline-block' }}>
-            <Image src={`http://localhost:3065/${v}`} style={{ width: '200px' }} alt={v} />
+            <Image src={`${backUrl}/${v}`} style={{ width: '200px' }} alt={v} />
             <div>
               <Button onClick={onRemoveImage(i)}>제거</Button>
             </div>
