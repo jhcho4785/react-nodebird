@@ -12,6 +12,8 @@ const passport = require('passport');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const path = require('path');
+const hpp = require('hpp');
+const helmet = require('helmet');
 
 dotenv.config();
 const app = express();
@@ -25,6 +27,14 @@ db.sequelize
 
 passportConfig();
 
+if (process.env.NODE_ENV === 'production') {
+  app.use(morgan('combined'));
+  app.use(hpp());
+  app.use(helmet());
+} else {
+  app.use(morgan('dev'));
+}
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
@@ -37,11 +47,10 @@ app.use(
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(morgan('dev'));
 
 app.use(
   cors({
-    origin: true, //모든 주소 허용 - 실제 운영 시 프론트 서버 도메인으로 고정
+    origin: ['http://localhost:3060', 'nodebird.com'],
     credentials: true,
   }),
 );
@@ -53,6 +62,6 @@ app.use('/posts', postsRouter);
 app.use('/user', userRouter);
 app.use('/hashtag', hashtagRouter);
 
-app.listen(3065, () => {
+app.listen(80, () => {
   console.log('서버 실행 중!');
 });
