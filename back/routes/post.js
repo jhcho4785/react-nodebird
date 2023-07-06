@@ -4,7 +4,8 @@ const { isLoggedIn } = require('./middlewares');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const { Op } = require('sequelize');
+const multerS3 = require('multer-s3');
+const AWS = require('aws-sdk');
 
 const router = express.Router();
 
@@ -14,16 +15,20 @@ try {
   fs.mkdirSync('uploads');
 }
 
+AWS.config.update({
+  region: 'ap-northeast-2',
+  credentials: {
+    accessKeyId: process.env.S3_ACCESS_KEY_ID,
+    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+  },
+});
+
 const upload = multer({
-  storage: multer.diskStorage({
-    destination(req, file, done) {
-      done(null, 'uploads');
-    },
-    filename(req, file, done) {
-      const filename = Buffer.from(file.originalname, 'latin1').toString('utf8');
-      const ext = path.extname(filename); //확장자 추출
-      const basename = path.basename(filename, ext); //확장자를 제외한 파일명
-      done(null, basename + '_' + new Date().getTime() + ext); //파일명 중복을 방지하기 위해 업로드 시간을 이름에 덧붙임
+  storage: multerS3({
+    s3: new AWS.S3(),
+    bucket: 'react-nodebird-s3',
+    key(req, file, cb) {
+      cb(null, `original/${Date.now()}_${path.basename(file.originalname)}`);
     },
   }),
   limits: { fileSize: 20 * 1024 * 1024 }, //파일 용량 제한
@@ -237,7 +242,7 @@ router.delete('/:postId', isLoggedIn, async (req, res, next) => {
 //upload.array: 단일 태그에서 복수 파일, upload.fill: 인풋 태그가 두개 이상일 때, upload.single: 단일 파일, upload.none: 기타 텍스트 파일 등 - 프론트 input name이 인자와 맞아야 함
 router.post('/images', isLoggedIn, upload.array('image'), async (req, res, next) => {
   //미리보기, 리사이징 등을 먼저 하기 위해 이미지를 먼저 올리고 컨텐츠를 후에 작성
-  res.json(req.files.map((v) => v.filename));
+  res.json(req.files.map((v) => v.location));
 });
 
 router.get('/:postId', async (req, res, next) => {
