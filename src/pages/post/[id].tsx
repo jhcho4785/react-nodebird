@@ -8,6 +8,7 @@ import AppLayout from '@/components/AppLayout';
 import PostCard from '@/components/PostCard';
 import Post from '@/interfaces/post';
 import Head from 'next/head';
+import { backUrl } from '@/config/config';
 
 const SinglePost = () => {
   const router = useRouter();
@@ -33,7 +34,7 @@ const SinglePost = () => {
           property="og:image"
           content={singlePost.Images[0] ? singlePost.Images[0].src : 'https://nodebird.com/favicon.ico'}
         />
-        <meta property="og:url" content={`https://nodebird.com/post/${id}`} />
+        <meta property="og:url" content={`${backUrl}/post/${id}`} />
       </Head>
       <PostCard post={singlePost} />
     </AppLayout>

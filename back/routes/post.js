@@ -242,7 +242,7 @@ router.delete('/:postId', isLoggedIn, async (req, res, next) => {
 //upload.array: 단일 태그에서 복수 파일, upload.fill: 인풋 태그가 두개 이상일 때, upload.single: 단일 파일, upload.none: 기타 텍스트 파일 등 - 프론트 input name이 인자와 맞아야 함
 router.post('/images', isLoggedIn, upload.array('image'), async (req, res, next) => {
   //미리보기, 리사이징 등을 먼저 하기 위해 이미지를 먼저 올리고 컨텐츠를 후에 작성
-  res.json(req.files.map((v) => v.location));
+  res.json(req.files.map((v) => v.location.replace(/\/original\//, '/thumb/')));
 });
 
 router.get('/:postId', async (req, res, next) => {
