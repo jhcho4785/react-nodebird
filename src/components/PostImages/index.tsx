@@ -14,7 +14,7 @@ const PostImages: FC<{ images: { src: string }[] }> = ({ images }) => {
   if (images.length === 1) {
     return (
       <>
-        <Image role="presentation" src={`${backUrl}/${images[0].src}`} alt={images[0].src} onClick={onZoom} />
+        <Image role="presentation" src={images[0].src} alt={images[0].src} onClick={onZoom} />
         {showImagesZoom && <ImagesZoom images={images} onClose={onClose} />}
       </>
     );
@@ -25,14 +25,14 @@ const PostImages: FC<{ images: { src: string }[] }> = ({ images }) => {
         <Image
           role="presentation"
           style={{ width: '50%', display: 'inline-block' }}
-          src={`${backUrl}/${images[0].src}`}
+          src={images[0].src}
           alt={images[0].src}
           onClick={onZoom}
         />
         <Image
           role="presentation"
           style={{ width: '50%', display: 'inline-block' }}
-          src={`${backUrl}/${images[1].src}`}
+          src={images[0].src}
           alt={images[1].src}
           onClick={onZoom}
         />
@@ -46,7 +46,7 @@ const PostImages: FC<{ images: { src: string }[] }> = ({ images }) => {
         <Image
           role="presentation"
           style={{ width: '50%', display: 'inline-block' }}
-          src={`${backUrl}/${images[0].src}`}
+          src={images[0].src}
           alt={images[0].src}
           onClick={onZoom}
         />
